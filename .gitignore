@@ -1,0 +1,17 @@
+# Private site data: accounts, service requests, reviews, reports and receipts
+/data/
+
+# Uploaded photos and product media are copied to the persistent server separately
+/uploads/
+
+# Local secrets, dependencies, archives and logs
+.env
+.env.*
+!.env.example
+node_modules/
+*.log
+*.zip
+*.bak
+*.backup
+*.pem
+*.key

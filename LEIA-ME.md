@@ -1,0 +1,30 @@
+# RS TECH — site e sistema de solicitações
+
+O site agora inclui cadastro e login de clientes, envio de solicitações privadas e uma área administrativa exclusiva da proprietária. Ele precisa ser iniciado por um servidor Node.js; abrir `index.html` diretamente não ativa login nem grava solicitações.
+
+## Iniciar no computador
+
+Instale Node.js 20 ou superior. No terminal, abra a pasta `outputs`. O e-mail da proprietária está definido como `rstechassistenciacelular@gmail.com`. Na primeira inicialização, informe a senha por variável de ambiente:
+
+**PowerShell**
+
+```powershell
+$env:OWNER_PASSWORD = "informe-a-senha-da-proprietaria"
+node server.mjs
+```
+
+Abra `http://localhost:3000`. A primeira inicialização grava somente um hash da senha, nunca a senha em texto puro. Depois disso, basta executar `node server.mjs` para reiniciar o site. Clientes criam suas próprias contas pela página **Entrar**. Não há opção pública de cadastro de proprietária.
+
+## Dados e publicação
+
+As contas e solicitações são armazenadas em arquivos JSON na pasta `data`, criada na primeira inicialização. Faça cópias de segurança dessa pasta. Para hospedagem pública, use um serviço Node.js com HTTPS, variáveis secretas protegidas e armazenamento persistente. O projeto atual usa sessões em memória e armazenamento JSON, adequado para demonstração e implantação pequena de instância única; para uso comercial com várias instâncias ou maior volume, substitua esses componentes por armazenamento gerenciado e sessão compartilhada.
+
+O painel administrativo fica em `/dashboard.html`. Nele, a proprietária pode consultar e editar as solicitações (incluindo status e observações internas), os textos do site, os serviços, os benefícios, as etapas, a garantia, o contato, os perfis sociais, a galeria de fotos e as avaliações de clientes. As fotos aceitas são JPG, PNG e WebP, com até 4 MB cada e limite de 24 fotos. Ao adicionar uma foto, ela fica publicada na galeria, pode incluir opcionalmente um link de vídeo do reparo, e os visitantes podem comentar nela; os comentários ficam visíveis imediatamente. Na aba Comentários nas fotos, a proprietária pode editar ou apagar comentários; ao apagar uma foto da galeria e salvar, a publicação e seus comentários também são apagados. Na aba Caixa, registre lançamentos como Reparo ou Venda, com aparelho/produto, valor cobrado, custo, status e forma de pagamento e tempo de reparo; esses campos são opcionais. A classificação separa os lançamentos no relatório. O lucro e a margem só são calculados quando o valor cobrado e o custo da peça estiverem preenchidos. O sistema também exibe valores recebidos e pagamentos marcados como pendentes. A aba Relatórios é exclusiva da proprietária e consolida os lançamentos do Caixa pela data de criação no fuso de São Paulo. Os valores são atualizados com os lançamentos do Caixa enquanto o relatório está aberto, inclusive para meses anteriores ainda não fechados. O relatório só é fechado e salvo quando a proprietária anexa a foto do comprovante do dízimo. O relatório inclui receita, custos de peças, lucro, recebimentos, valores pendentes, gráfico com percentuais e dízimo de 10% sobre o lucro positivo. Ordens incompletas não entram no cálculo do lucro e do dízimo. Depois do fechamento, o botão disponibiliza um PDF para baixar e assinar. A proprietária também pode anexar, visualizar, substituir e apagar uma foto JPG, PNG ou WebP do comprovante de dízimo por mês; essas imagens são privadas e acessíveis apenas pela conta da proprietária. Os relatórios fechados são snapshots e não mudam quando uma ordem antiga é editada. No Caixa, cada ordem também pode ser editada por meio do botão Salvar edição ou removida com Excluir ordem. As ordens ficam privadas no painel e podem ser editadas ou apagadas. Na galeria de fotos, é possível adicionar opcionalmente um link externo para o vídeo do reparo; ele aparece como link na publicação. Os visitantes podem enviar uma avaliação sem criar conta; ela fica pendente até que a proprietária a publique ou rejeite no painel. Publique somente avaliações reais e autorizadas pelos clientes. Clientes não conseguem abrir a área administrativa; a API confere o perfil da conta em cada solicitação.
+
+A página inicial e as informações da empresa aparecem sem login. O login só é solicitado quando alguém decide enviar uma solicitação de serviço; criar conta é opcional até esse momento.
+
+Na aba **Vendas** do painel, a proprietária cadastra produtos e pode anexar uma foto JPG, PNG ou WebP de até 4 MB e um link de vídeo (ambos opcionais). A foto e o vídeo podem ser substituídos ou removidos ao editar o produto. Os produtos publicados aparecem na seção Vendas do site. Para comprar, o cliente entra ou cria uma conta, escolhe a quantidade e a forma de pagamento; o estoque é atualizado e o pedido fica visível para o cliente e para a proprietária. A proprietária pode atualizar o andamento e marcar o pagamento como recebido ou pendente. O cancelamento devolve a quantidade ao estoque. O site registra a forma escolhida e o pedido, mas não processa pagamentos: a equipe combina o pagamento e a entrega/retirada diretamente com o cliente. No Caixa, cada lançamento agora pode ser classificado como Reparo ou Venda; lançamentos antigos sem classificação continuam identificados como Reparo. Os relatórios separam receita, despesas/custos, lucro, recebimentos e valores a receber entre Reparos · Caixa e Vendas · produtos, além dos totais e do dízimo calculado sobre o lucro total. Vendas não canceladas entram no relatório com receita e custo cadastrados no produto. Na aba Vendas, também é possível salvar alterações e excluir o cadastro de produtos ou marcá-los como esgotados; produtos esgotados não aceitam novos pedidos, mesmo que ainda haja unidades no estoque.
+
+## Personalizar os dados da empresa
+
+No `index.html`, substitua os campos `[Edite: ...]` por WhatsApp, endereço e horário reais. O nome já está escrito corretamente como **RS TECH ASSISTÊNCIA TÉCNICA CELULAR**. Estilos e conteúdo ficam em `styles.css`; comportamentos do site, autenticação e painel ficam nos arquivos `.js` correspondentes.
